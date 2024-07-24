@@ -13,8 +13,11 @@ import (
 	"github.com/pterm/pterm"
 )
 
-// func handleFatalError(error Error) {
-// }
+func handleFatalError(err error) {
+	pterm.Error.Println(err)
+	os.Exit(1)
+}
+
 func main() {
 
 	pterm.EnableDebugMessages()
@@ -29,8 +32,9 @@ func main() {
 	ctx := context.Background()
 	c, err := resourcemanager.NewProjectsClient(ctx)
 	if err != nil {
-		// TODO: Handle error.
-		panic(err)
+		pterm.Error.Println(err)
+		pterm.Error.Println("Try `gcloud auth application-default login`")
+		os.Exit(1)
 	}
 	defer c.Close()
 
@@ -44,7 +48,7 @@ func main() {
 			break
 		}
 		if err != nil {
-			panic(err)
+			handleFatalError(err)
 		}
 		pterm.Debug.Println(resp)
 		_ = it.Response.(*resourcemanagerpb.ListProjectsResponse)
