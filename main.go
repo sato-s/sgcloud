@@ -1,13 +1,20 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 
+	resourcemanager "cloud.google.com/go/resourcemanager/apiv3"
+	resourcemanagerpb "cloud.google.com/go/resourcemanager/apiv3/resourcemanagerpb"
+	"google.golang.org/api/iterator"
+
 	"github.com/pterm/pterm"
 )
 
+// func handleFatalError(error Error) {
+// }
 func main() {
 
 	pterm.EnableDebugMessages()
@@ -18,6 +25,31 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
+
+	ctx := context.Background()
+	c, err := resourcemanager.NewProjectsClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+		panic(err)
+	}
+	defer c.Close()
+
+	req := &resourcemanagerpb.ListProjectsRequest{
+		// TODO: Fill request struct fields.
+	}
+	it := c.ListProjects(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		pterm.Debug.Println(resp)
+		_ = it.Response.(*resourcemanagerpb.ListProjectsResponse)
+	}
+
 	// use(path)
 
 	// Initialize an empty slice to hold the options
