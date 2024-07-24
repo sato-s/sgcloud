@@ -32,8 +32,8 @@ func main() {
 	ctx := context.Background()
 	c, err := resourcemanager.NewProjectsClient(ctx)
 	if err != nil {
-		pterm.Error.Println(err)
-		pterm.Error.Println("Try `gcloud auth application-default login`")
+		pterm.Debug.Println(err)
+		pterm.Error.Println("Failed to find default credentials. Try `gcloud auth application-default login`")
 		os.Exit(1)
 	}
 	defer c.Close()
