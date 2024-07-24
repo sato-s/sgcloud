@@ -2,12 +2,24 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/pterm/pterm"
 )
 
 func main() {
-	pterm.Error.Println("Errors show the filename and linenumber inside the terminal!")
+
+	pterm.EnableDebugMessages()
+
+	path, err := exec.LookPath("gcloud")
+	if err != nil {
+		pterm.Error.Println("gcloud not found.")
+		os.Exit(1)
+	}
+	pterm.Debug.Println(path)
+	// use(path)
+
 	// Initialize an empty slice to hold the options
 	var options []string
 
