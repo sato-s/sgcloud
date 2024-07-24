@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	pterm.Error.Println("Errors show the filename and linenumber inside the terminal!")
 	// Initialize an empty slice to hold the options
 	var options []string
 
