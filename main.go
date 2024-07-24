@@ -24,7 +24,7 @@ func main() {
 
 	path, err := exec.LookPath("gcloud")
 	if err != nil {
-		pterm.Error.Println("gcloud not found.")
+		pterm.Error.Println("`gcloud` command not found.")
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
