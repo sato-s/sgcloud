@@ -38,6 +38,8 @@ func main() {
 	}
 	defer c.Close()
 
+	// Search使ったほうがよさそう
+	// https://github.com/googleapis/google-cloud-go/blob/3a566ed3f464089af85ab938bc593f2acb14fdf7/internal/generated/snippets/resourcemanager/apiv3/ProjectsClient/SearchProjects/main.go
 	req := &resourcemanagerpb.ListProjectsRequest{
 		// TODO: Fill request struct fields.
 	}
