@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/pterm/pterm"
+	"github.com/sato-s/sgcloud/internal/command"
 )
 
 func handleFatalError(err error) {
@@ -23,7 +24,7 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
-	RunGcloud()
+	command.RunGcloud()
 
 	// use(path)
 
