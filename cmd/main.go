@@ -1,12 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"os/exec"
-
-	"google.golang.org/api/iterator"
 
 	"github.com/pterm/pterm"
 )
@@ -26,6 +23,7 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
+	RunGcloud()
 
 	// use(path)
 
