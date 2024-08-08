@@ -6,4 +6,8 @@ type Project struct {
 	Number string `json:"projectName"`
 }
 
+func (p *Project) String() string {
+	return p.ID + p.Name + p.Number
+}
+
 type Projects []Project
