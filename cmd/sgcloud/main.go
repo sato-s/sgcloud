@@ -23,18 +23,17 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	// use(path)
 
-	// Initialize an empty slice to hold the options
 	var options []string
 	for _, pj := range pjs {
 		options = append(options, pj.String())
 	}
 
-	// Use PTerm's interactive select feature to present the options to the user and capture their selection
-	// The Show() method displays the options and waits for the user's input
-	selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show()
+	selectedOption, _ := pterm.
+		DefaultInteractiveSelect.
+		WithDefaultText("Select a Project").
+		WithOptions(options).
+		Show()
 
-	// Display the selected option to the user with a green color for emphasis
 	pterm.Info.Printfln("Selected option: %s", pterm.Green(selectedOption))
 }
