@@ -8,11 +8,6 @@ import (
 	"github.com/sato-s/sgcloud/internal/command"
 )
 
-func handleFatalError(err error) {
-	pterm.Error.Println(err)
-	os.Exit(1)
-}
-
 func main() {
 
 	pterm.EnableDebugMessages()
