@@ -29,11 +29,25 @@ func main() {
 		options = append(options, pj.String())
 	}
 
-	selectedOption, _ := pterm.
+	selectedPjStr, err := pterm.
 		DefaultInteractiveSelect.
 		WithDefaultText("Select a Project").
 		WithOptions(options).
 		Show()
+	if err != nil {
+		pterm.Error.Println(err)
+		os.Exit(1)
+	}
 
-	pterm.Info.Printfln("Selected option: %s", pterm.Green(selectedOption))
+	// Find selected Project
+	for i, option := range options {
+		if option == selectedPjStr {
+			selectedPj := pjs[i]
+			pterm.Info.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
+			return
+		}
+	}
+	// Never reach here
+	pterm.Error.Printfln("Unable to find selected project %s", selectedPjStr)
+	os.Exit(1)
 }
