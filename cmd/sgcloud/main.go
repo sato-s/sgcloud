@@ -43,8 +43,13 @@ func main() {
 	for i, option := range options {
 		if option == selectedPjStr {
 			selectedPj := pjs[i]
-			pterm.Info.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
-			return
+			pterm.Debug.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
+			if err := command.SetProject(selectedPj.ID); err != nil {
+				pterm.Error.Printfln("Unable to change project. %s", err)
+			} else {
+				pterm.Info.Printfln("Switched to %s", selectedPjStr)
+				return
+			}
 		}
 	}
 	// Never reach here

@@ -25,6 +25,16 @@ func ProjectList() (projects.Projects, error) {
 	}
 }
 
+func SetProject(id string) error {
+	out, err := runGcloud("config", "set", "project", id, "--quiet")
+	if err != nil {
+		pterm.Error.Println(string(out))
+		return err
+	} else {
+		return nil
+	}
+}
+
 func runGcloud(args ...string) ([]byte, error) {
 	out, err := exec.Command("gcloud", args...).CombinedOutput()
 
