@@ -1,20 +1,28 @@
 package command
 
 import (
+	"encoding/json"
+	"fmt"
 	"os/exec"
 
 	"github.com/pterm/pterm"
+	"github.com/sato-s/sgcloud/internal/projects"
 )
 
-func ProjectList() error {
+func ProjectList() (projects.Projects, error) {
 	out, err := runGcloud("--format", "json", "projects", "list")
 	if err != nil {
-		return err
+		return projects.Projects{}, err
 	} else {
-		pterm.Info.Println(string(out))
+		pjs := make(projects.Projects, 0)
+		err := json.Unmarshal(out, &pjs)
+		if err != nil {
+			pterm.Error.Println(string(out))
+			return projects.Projects{}, fmt.Errorf("Failed to parse output. %v", err)
+		} else {
+			return pjs, nil
+		}
 	}
-
-	return nil
 }
 
 func runGcloud(args ...string) ([]byte, error) {

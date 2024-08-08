@@ -1,3 +1,5 @@
+package projects
+
 type Project struct {
 	ID     string
 	Name   string

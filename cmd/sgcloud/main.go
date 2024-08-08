@@ -24,8 +24,13 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
-	command.ProjectList()
-
+	pjs, err := command.ProjectList()
+	if err == nil {
+		pterm.Debug.Println(pjs)
+	} else {
+		pterm.Error.Println(err)
+		os.Exit(1)
+	}
 	// use(path)
 
 	// Initialize an empty slice to hold the options
