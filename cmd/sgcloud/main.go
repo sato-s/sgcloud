@@ -24,7 +24,7 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
-	command.RunGcloud()
+	command.ProjectList()
 
 	// use(path)
 

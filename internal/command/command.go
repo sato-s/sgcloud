@@ -1,12 +1,13 @@
 package command
 
 import (
-	"github.com/pterm/pterm"
 	"os/exec"
+
+	"github.com/pterm/pterm"
 )
 
-func RunGcloud() error {
-	out, err := exec.Command("gcloud", "projects", "list").Output()
+func ProjectList() error {
+	out, err := runGcloud("--format", "json", "projects", "list")
 	if err != nil {
 		return err
 	} else {
@@ -14,4 +15,15 @@ func RunGcloud() error {
 	}
 
 	return nil
+}
+
+func runGcloud(args ...string) ([]byte, error) {
+	out, err := exec.Command("gcloud", args...).CombinedOutput()
+
+	if err != nil {
+		pterm.Error.Println(string(out))
+		return []byte{}, err
+	} else {
+		return out, nil
+	}
 }
