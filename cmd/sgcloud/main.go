@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"os"
 	"os/exec"
 
@@ -9,8 +10,12 @@ import (
 )
 
 func main() {
+	debugPrintPtr := flag.Bool("debug", false, "Enable debug print")
+	flag.Parse()
 
-	pterm.EnableDebugMessages()
+	if *debugPrintPtr {
+		pterm.EnableDebugMessages()
+	}
 
 	path, err := exec.LookPath("gcloud")
 	if err != nil {
