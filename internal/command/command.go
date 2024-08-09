@@ -17,7 +17,6 @@ func ProjectList() (projects.Projects, error) {
 		pjs := make(projects.Projects, 0)
 		err := json.Unmarshal(out, &pjs)
 		if err != nil {
-			pterm.Error.Println(string(out))
 			return projects.Projects{}, fmt.Errorf("Failed to parse output. %v", err)
 		} else {
 			return pjs, nil
@@ -25,14 +24,20 @@ func ProjectList() (projects.Projects, error) {
 	}
 }
 
+func ActivateSgcloudConfig(configName string) error {
+	_, err := runGcloud("config", "configurations", "activate", configName)
+	return err
+}
+
+func CreateSgcloudConfig(configName string) error {
+	// This command create and activate `configName`
+	_, err := runGcloud("config", "configurations", "create", configName)
+	return err
+}
+
 func SetProject(id string) error {
-	out, err := runGcloud("config", "set", "project", id, "--quiet")
-	if err != nil {
-		pterm.Error.Println(string(out))
-		return err
-	} else {
-		return nil
-	}
+	_, err := runGcloud("config", "set", "project", id, "--quiet")
+	return err
 }
 
 func runGcloud(args ...string) ([]byte, error) {

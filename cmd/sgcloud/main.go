@@ -9,6 +9,8 @@ import (
 	"github.com/sato-s/sgcloud/internal/command"
 )
 
+const sgCloudDefaultConfigName = "sgcloud"
+
 func main() {
 	debugPrintPtr := flag.Bool("debug", false, "Enable debug print")
 	flag.Parse()
@@ -17,6 +19,7 @@ func main() {
 		pterm.EnableDebugMessages()
 	}
 	ensureGcloudInstalled()
+	// ensureSgcloudConfigActivated()
 	showProjectSelector()
 }
 
@@ -28,6 +31,16 @@ func ensureGcloudInstalled() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
+}
+
+func ensureSgcloudConfigActivated() {
+	if err := command.ActivateSgcloudConfig(sgCloudDefaultConfigName); err != nil {
+		err := command.CreateSgcloudConfig(sgCloudDefaultConfigName)
+		if err != nil {
+			pterm.Error.Println("Failed to activate config %s", sgCloudDefaultConfigName)
+			os.Exit(1)
+		}
+	}
 }
 
 func showProjectSelector() {
@@ -59,6 +72,7 @@ func showProjectSelector() {
 			pterm.Debug.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
 			if err := command.SetProject(selectedPj.ID); err != nil {
 				pterm.Error.Printfln("Unable to change project. %s", err)
+				os.Exit(1)
 			} else {
 				pterm.Info.Printfln("Switched to %s", selectedPjStr)
 				return
