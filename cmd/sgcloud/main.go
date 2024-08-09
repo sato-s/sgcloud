@@ -20,6 +20,7 @@ func main() {
 	}
 	ensureGcloudInstalled()
 	ensureSgcloudConfigActivated()
+	ensureConfigHasAccount()
 	showProjectSelector()
 }
 
@@ -43,6 +44,10 @@ func ensureSgcloudConfigActivated() {
 			pterm.Info.Println("Created.")
 		}
 	}
+}
+
+func ensureConfigHasAccount() {
+	// FIXME
 }
 
 func showProjectSelector() {
