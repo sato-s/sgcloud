@@ -16,6 +16,11 @@ func main() {
 	if *debugPrintPtr {
 		pterm.EnableDebugMessages()
 	}
+	ensureGcloudInstalled()
+	showProjectSelector()
+}
+
+func ensureGcloudInstalled() {
 
 	path, err := exec.LookPath("gcloud")
 	if err != nil {
@@ -23,7 +28,9 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
+}
 
+func showProjectSelector() {
 	pjs, err := command.ProjectList()
 	if err != nil {
 		pterm.Error.Println(err)
