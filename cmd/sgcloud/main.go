@@ -19,7 +19,7 @@ func main() {
 		pterm.EnableDebugMessages()
 	}
 	ensureGcloudInstalled()
-	// ensureSgcloudConfigActivated()
+	ensureSgcloudConfigActivated()
 	showProjectSelector()
 }
 
@@ -35,10 +35,12 @@ func ensureGcloudInstalled() {
 
 func ensureSgcloudConfigActivated() {
 	if err := command.ActivateSgcloudConfig(sgCloudDefaultConfigName); err != nil {
+		pterm.Info.Println("Config for sgcloud doesn't exist. Creating...")
 		err := command.CreateSgcloudConfig(sgCloudDefaultConfigName)
 		if err != nil {
-			pterm.Error.Println("Failed to activate config %s", sgCloudDefaultConfigName)
 			os.Exit(1)
+		} else {
+			pterm.Info.Println("Created.")
 		}
 	}
 }
