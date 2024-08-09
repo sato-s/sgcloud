@@ -14,6 +14,9 @@ jobs:
   release:
     name: Create Release
     runs-on: 'ubuntu-latest'
+    defaults:
+      run:
+        working-directory: cmd/sgcloud/
     strategy:
       matrix:
         goosarch:
@@ -39,7 +42,6 @@ jobs:
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
       - name: Build
         run: |
-          cd cmd/sgcloud
           go build -o "$BINARY_NAME" -v
       - name: Release with Notes
         uses: softprops/action-gh-release@v1
