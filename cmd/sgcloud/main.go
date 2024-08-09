@@ -23,6 +23,7 @@ func main() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
+
 	pjs, err := command.ProjectList()
 	if err != nil {
 		pterm.Error.Println(err)
