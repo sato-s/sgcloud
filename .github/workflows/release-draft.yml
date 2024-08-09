@@ -30,7 +30,6 @@ jobs:
           go-version: '1.22.5'
       - name: Get OS and arch info
         run: |
-          cd cmd/sgcloud
           GOOSARCH=${{matrix.goosarch}}
           GOOS=${GOOSARCH%/*}
           GOARCH=${GOOSARCH#*/}
@@ -40,6 +39,7 @@ jobs:
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
       - name: Build
         run: |
+          cd cmd/sgcloud
           go build -o "$BINARY_NAME" -v
       - name: Release with Notes
         uses: softprops/action-gh-release@v1
