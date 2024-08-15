@@ -19,8 +19,6 @@ func main() {
 		pterm.EnableDebugMessages()
 	}
 	ensureGcloudInstalled()
-	ensureSgcloudConfigActivated()
-	ensureConfigHasAccount()
 	showProjectSelector()
 }
 
@@ -32,22 +30,6 @@ func ensureGcloudInstalled() {
 		os.Exit(1)
 	}
 	pterm.Debug.Println(path)
-}
-
-func ensureSgcloudConfigActivated() {
-	if err := command.ActivateSgcloudConfig(sgCloudDefaultConfigName); err != nil {
-		pterm.Info.Println("Config for sgcloud doesn't exist. Creating...")
-		err := command.CreateSgcloudConfig(sgCloudDefaultConfigName)
-		if err != nil {
-			os.Exit(1)
-		} else {
-			pterm.Info.Println("Created.")
-		}
-	}
-}
-
-func ensureConfigHasAccount() {
-	// FIXME
 }
 
 func showProjectSelector() {
