@@ -7,6 +7,7 @@ import (
 
 	"github.com/pterm/pterm"
 	"github.com/sato-s/sgcloud/internal/command"
+	"github.com/sato-s/sgcloud/internal/projects"
 )
 
 const sgCloudDefaultConfigName = "sgcloud"
@@ -19,7 +20,8 @@ func main() {
 		pterm.EnableDebugMessages()
 	}
 	ensureGcloudInstalled()
-	showProjectSelector()
+	pjs := getProjects()
+	showProjectSelector(pjs)
 }
 
 func ensureGcloudInstalled() {
@@ -32,13 +34,16 @@ func ensureGcloudInstalled() {
 	pterm.Debug.Println(path)
 }
 
-func showProjectSelector() {
+func getProjects() projects.Projects {
 	pjs, err := command.ProjectList()
 	if err != nil {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
+	return pjs
+}
 
+func showProjectSelector(pjs projects.Projects) {
 	var options []string
 	for _, pj := range pjs {
 		options = append(options, pj.String())
