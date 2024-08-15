@@ -7,7 +7,7 @@ type Project struct {
 }
 
 func (p *Project) String() string {
-	return p.ID + p.Name + p.Number
+	return p.ID + " " + p.Name + " " + p.Number
 }
 
 type Projects []Project
