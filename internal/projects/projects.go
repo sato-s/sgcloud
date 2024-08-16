@@ -1,5 +1,7 @@
 package projects
 
+import "fmt"
+
 type Project struct {
 	ID     string `json:"projectId"`
 	Name   string `json:"name"`
@@ -7,7 +9,7 @@ type Project struct {
 }
 
 func (p *Project) String() string {
-	return p.ID + " " + p.Name + " " + p.Number
+	return fmt.Sprintf("%s (name: %s, number: %s)", p.ID, p.Name, p.Number)
 }
 
 type Projects []Project
