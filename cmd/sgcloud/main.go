@@ -45,7 +45,7 @@ func getProjects() projects.Projects {
 	} else {
 		pjs, err2 := command.ProjectList()
 		if err2 != nil {
-			pterm.Error.Println(err2)
+			pterm.Error.Println("Failed to get project list.", err2)
 			os.Exit(1)
 		}
 		cache.Projects = pjs
