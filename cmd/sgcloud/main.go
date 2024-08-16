@@ -20,6 +20,7 @@ func main() {
 	if *debugPrintPtr {
 		pterm.EnableDebugMessages()
 	}
+
 	ensureGcloudInstalled()
 	pjs := getProjects()
 	showProjectSelector(pjs)
@@ -43,6 +44,7 @@ func getProjects() projects.Projects {
 	if cache.Projects != nil && err1 == nil {
 		return cache.Projects
 	} else {
+		spinnerInfo, _ := pterm.DefaultSpinner.Start("Getting project list...")
 		pjs, err2 := command.ProjectList()
 		if err2 != nil {
 			pterm.Error.Println("Failed to get project list.", err2)
@@ -50,6 +52,7 @@ func getProjects() projects.Projects {
 		}
 		cache.Projects = pjs
 		cache.Save()
+		spinnerInfo.Info()
 		return pjs
 	}
 }
@@ -79,7 +82,7 @@ func showProjectSelector(pjs projects.Projects) {
 				pterm.Error.Printfln("Unable to change project. %s", err)
 				os.Exit(1)
 			} else {
-				pterm.Info.Printfln("Switched to %s", selectedPjStr)
+				pterm.Success.Printfln("Switched to %s", selectedPjStr)
 				return
 			}
 		}
