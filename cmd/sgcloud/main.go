@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/pterm/pterm"
+	"github.com/sato-s/sgcloud/internal/cache"
 	"github.com/sato-s/sgcloud/internal/command"
 	"github.com/sato-s/sgcloud/internal/projects"
 )
@@ -35,12 +36,22 @@ func ensureGcloudInstalled() {
 }
 
 func getProjects() projects.Projects {
-	pjs, err := command.ProjectList()
-	if err != nil {
-		pterm.Error.Println(err)
-		os.Exit(1)
+	cache, err1 := cache.NewCache()
+	if err1 != nil {
+		pterm.Debug.Println("Failed to read cache %s", err1)
 	}
-	return pjs
+	if cache.Projects != nil || err1 != nil {
+		return cache.Projects
+	} else {
+		pjs, err2 := command.ProjectList()
+		if err2 != nil {
+			pterm.Error.Println(err2)
+			os.Exit(1)
+		}
+		cache.Projects = pjs
+		cache.Save()
+		return pjs
+	}
 }
 
 func showProjectSelector(pjs projects.Projects) {

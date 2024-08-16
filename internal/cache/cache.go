@@ -3,7 +3,6 @@ package cache
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"os"
 	"path"
 	"time"
@@ -18,13 +17,10 @@ type Cache struct {
 
 func NewCache() (*Cache, error) {
 	file := cachefile()
-	c = &Cache{}
 	if _, err := os.Stat(file); err == nil {
-		content = ioutil.ReadFile(file)
-		err := json.Unmarshal(c, c)
-		return c, err
+		return readCacheJsonFile(file)
 	} else if errors.Is(err, os.ErrNotExist) {
-		return c, nil
+		return &Cache{}, nil
 	} else {
 		return nil, err
 	}
@@ -32,11 +28,23 @@ func NewCache() (*Cache, error) {
 
 func (c *Cache) Save() error {
 	c.CachedAt = time.Now()
-	if content, err = json.Marshal(c); err != nil {
-		os.WriteFile()
+	if content, err := json.Marshal(c); err == nil {
+		return os.WriteFile(cachefile(), content, 0600)
+	} else {
+		return err
 	}
 }
 
 func cachefile() string {
-	return path.Join(os.Tempdir, "sgcloud-cache-file.json")
+	return path.Join(os.TempDir(), "sgcloud-cache-file.json")
+}
+
+func readCacheJsonFile(file string) (*Cache, error) {
+	c := &Cache{}
+	content, err := os.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(content, c)
+	return c, err
 }
