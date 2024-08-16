@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"os"
@@ -15,13 +16,25 @@ type Cache struct {
 	CachedAt time.Time
 }
 
-func NewCache() (c *Cache, isCacheExist bool, err error) {
+func NewCache() (*Cache, error) {
 	file := cachefile()
-	if _, err := os.Stat(file); errors.Is(err, os.ErrNotExist) {
-		return &Cache{}, false, nil
-	} else if {
+	c = &Cache{}
+	if _, err := os.Stat(file); err == nil {
+		content = ioutil.ReadFile(file)
+		err := json.Unmarshal(c, c)
+		return c, err
+	} else if errors.Is(err, os.ErrNotExist) {
+		return c, nil
+	} else {
+		return nil, err
 	}
-	ioutil.ReadFile(cachefile())
+}
+
+func (c *Cache) Save() error {
+	c.CachedAt = time.Now()
+	if content, err = json.Marshal(c); err != nil {
+		os.WriteFile()
+	}
 }
 
 func cachefile() string {
