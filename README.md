@@ -6,7 +6,7 @@ Sgcloud - gcloud project picker
 1. Install [gcloud](https://cloud.google.com/sdk/docs/install#linux), if you haven't already.
 2. Download sgcloud from [release page](https://github.com/sato-s/sgcloud/releases)
 
-example(amd64):
+example(linux):
 
 ```
 sudo chmod 755 /usr/local/bin/sgcloud
