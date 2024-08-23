@@ -15,6 +15,7 @@ const sgCloudDefaultConfigName = "sgcloud"
 
 func main() {
 	debugPrintPtr := flag.Bool("debug", false, "Enable debug print")
+	// openBrowserPtr := flag.Bool("b", false, "Open Browser")
 	flag.Parse()
 
 	if *debugPrintPtr {
@@ -23,7 +24,8 @@ func main() {
 
 	ensureGcloudInstalled()
 	pjs := getProjects()
-	showProjectSelector(pjs)
+	selectedPj := showProjectSelector(pjs)
+	switchToProject(selectedPj)
 }
 
 func ensureGcloudInstalled() {
@@ -57,7 +59,7 @@ func getProjects() projects.Projects {
 	}
 }
 
-func showProjectSelector(pjs projects.Projects) {
+func showProjectSelector(pjs projects.Projects) projects.Project {
 	var options []string
 	for _, pj := range pjs {
 		options = append(options, pj.String())
@@ -76,18 +78,22 @@ func showProjectSelector(pjs projects.Projects) {
 	// Find selected Project
 	for i, option := range options {
 		if option == selectedPjStr {
-			selectedPj := pjs[i]
-			pterm.Debug.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
-			if err := command.SetProject(selectedPj.ID); err != nil {
-				pterm.Error.Printfln("Unable to change project. %s", err)
-				os.Exit(1)
-			} else {
-				pterm.Success.Printfln("Switched to %s", selectedPjStr)
-				return
-			}
+			return pjs[i]
 		}
 	}
 	// Never reach here
 	pterm.Error.Printfln("Unable to find selected project %s", selectedPjStr)
 	os.Exit(1)
+	return projects.Project{}
+}
+
+func switchToProject(selectedPj projects.Project) {
+	pterm.Debug.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
+	if err := command.SetProject(selectedPj.ID); err != nil {
+		pterm.Error.Printfln("Unable to change project. %s", err)
+		os.Exit(1)
+	} else {
+		pterm.Success.Printfln("Switched to %s", selectedPj.String())
+		return
+	}
 }
