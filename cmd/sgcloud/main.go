@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"os/exec"
 
 	"github.com/pterm/pterm"
+	"github.com/sato-s/sgcloud/internal/browser"
 	"github.com/sato-s/sgcloud/internal/cache"
 	"github.com/sato-s/sgcloud/internal/command"
 	"github.com/sato-s/sgcloud/internal/projects"
@@ -15,7 +17,7 @@ const sgCloudDefaultConfigName = "sgcloud"
 
 func main() {
 	debugPrintPtr := flag.Bool("debug", false, "Enable debug print")
-	// openBrowserPtr := flag.Bool("b", false, "Open Browser")
+	openBrowserPtr := flag.Bool("b", false, "Open Browser")
 	flag.Parse()
 
 	if *debugPrintPtr {
@@ -25,7 +27,11 @@ func main() {
 	ensureGcloudInstalled()
 	pjs := getProjects()
 	selectedPj := showProjectSelector(pjs)
-	switchToProject(selectedPj)
+	if *openBrowserPtr {
+		openBrowser(selectedPj)
+	} else {
+		gcloudProjectChange(selectedPj)
+	}
 }
 
 func ensureGcloudInstalled() {
@@ -87,7 +93,7 @@ func showProjectSelector(pjs projects.Projects) projects.Project {
 	return projects.Project{}
 }
 
-func switchToProject(selectedPj projects.Project) {
+func gcloudProjectChange(selectedPj projects.Project) {
 	pterm.Debug.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
 	if err := command.SetProject(selectedPj.ID); err != nil {
 		pterm.Error.Printfln("Unable to change project. %s", err)
@@ -95,5 +101,16 @@ func switchToProject(selectedPj projects.Project) {
 	} else {
 		pterm.Success.Printfln("Switched to %s", selectedPj.String())
 		return
+	}
+}
+
+func openBrowser(selectedPj projects.Project) {
+	url := fmt.Sprintf("https://console.cloud.google.com/welcome?project=%s", selectedPj.ID)
+	pterm.Success.Printfln("Opening %s in browser", selectedPj.String())
+	err := browser.OpenBrowser(url)
+
+	if err != nil {
+		pterm.Error.Println("Failed to open browser", err)
+		os.Exit(1)
 	}
 }
