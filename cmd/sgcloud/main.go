@@ -49,7 +49,7 @@ func getProjects() projects.Projects {
 	if err1 != nil {
 		pterm.Debug.Println("Failed to read cache.", err1)
 	}
-	if cache.Projects != nil && err1 == nil {
+	if cache.Projects != nil && err1 == nil && !(cache.IsExpired()) {
 		return cache.Projects
 	} else {
 		spinnerInfo, _ := pterm.DefaultSpinner.Start("Getting project list...")

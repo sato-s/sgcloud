@@ -10,6 +10,8 @@ import (
 	"github.com/sato-s/sgcloud/internal/projects"
 )
 
+const expirationDuration = 1 * time.Hour * 24
+
 type Cache struct {
 	Projects projects.Projects
 	CachedAt time.Time
@@ -33,6 +35,11 @@ func (c *Cache) Save() error {
 	} else {
 		return err
 	}
+}
+
+func (c *Cache) IsExpired() bool {
+	now := time.Now()
+	return now.After(c.CachedAt.Add(expirationDuration))
 }
 
 func cachefile() string {
