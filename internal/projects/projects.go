@@ -9,7 +9,7 @@ type Project struct {
 }
 
 func (p *Project) String() string {
-	return fmt.Sprintf("%s (name: %s, number: %s)", p.ID, p.Name, p.Number)
+	return fmt.Sprintf("%s (id: %s, number: %s)", p.Name, p.ID, p.Number)
 }
 
 type Projects []Project
