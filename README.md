@@ -1,4 +1,4 @@
-Sgcloud - gcloud project picker
+sgcloud - gcloud project picker
 ===
 
 ## Installation
@@ -8,20 +8,19 @@ Sgcloud - gcloud project picker
 
 ### example
 
-linux
+Linux
 
 ```
 sudo wget https://github.com/sato-s/sgcloud/releases/latest/download/sgcloud-linux-amd64 -O /usr/local/bin/sgcloud
 sudo chmod 755 /usr/local/bin/sgcloud
 ```
 
-mac(apple silicon)
+Mac (apple silicon)
 
 ```
 sudo wget https://github.com/sato-s/sgcloud/releases/latest/download/sgcloud-darwin-arm64 -O /usr/local/bin/sgcloud
 sudo chmod 755 /usr/local/bin/sgcloud
 ```
-
 
 ## Usage
 
