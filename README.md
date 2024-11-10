@@ -26,3 +26,5 @@ sudo chmod 755 /usr/local/bin/sgcloud
 
 Just run `sgcloud` to pick a gcloud project. Type character to fuzzy find a project. `C-n` and `C-p` to navigate.  
 Hitting the enter key to choose a project to use with gcloud command. This is equivalent to `gcloud config set project [Project of your choice]`.
+
+Also, you can use `sgcloud -b` to open google cloud console in your browser.
