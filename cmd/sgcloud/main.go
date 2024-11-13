@@ -15,13 +15,17 @@ import (
 
 const sgCloudDefaultConfigName = "sgcloud"
 
+var logger *pterm.Logger
+
 func main() {
 	debugPrintPtr := flag.Bool("debug", false, "Enable debug print")
 	openBrowserPtr := flag.Bool("b", false, "Open Browser")
 	flag.Parse()
 
 	if *debugPrintPtr {
-		pterm.EnableDebugMessages()
+		logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelDebug)
+	} else {
+		logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo)
 	}
 
 	ensureGcloudInstalled()
@@ -38,16 +42,16 @@ func ensureGcloudInstalled() {
 
 	path, err := exec.LookPath("gcloud")
 	if err != nil {
-		pterm.Error.Println("`gcloud` command not found.")
+		logger.Error("`gcloud` command not found.")
 		os.Exit(1)
 	}
-	pterm.Debug.Println(path)
+	logger.Debug(path)
 }
 
 func getProjects() projects.Projects {
 	cache, err1 := cache.NewCache()
 	if err1 != nil {
-		pterm.Debug.Println("Failed to read cache.", err1)
+		logger.Debug("Failed to read cache.", logger.Args("err", err1))
 	}
 	if cache.Projects != nil && err1 == nil && !(cache.IsExpired()) {
 		return cache.Projects
@@ -55,7 +59,7 @@ func getProjects() projects.Projects {
 		spinnerInfo, _ := pterm.DefaultSpinner.Start("Getting project list...")
 		pjs, err2 := command.ProjectList()
 		if err2 != nil {
-			pterm.Error.Println("Failed to get project list.", err2)
+			logger.Error("Failed to get project list.", logger.Args("err", err2))
 			os.Exit(1)
 		}
 		cache.Projects = pjs
@@ -77,7 +81,7 @@ func showProjectSelector(pjs projects.Projects) projects.Project {
 		WithOptions(options).
 		Show()
 	if err != nil {
-		pterm.Error.Println(err)
+		logger.Error("Failed to run selector", logger.Args("err", err))
 		os.Exit(1)
 	}
 
@@ -94,23 +98,23 @@ func showProjectSelector(pjs projects.Projects) projects.Project {
 }
 
 func gcloudProjectChange(selectedPj projects.Project) {
-	pterm.Debug.Printfln("Selected pj: %+v", pterm.Green(selectedPj))
+	logger.Debug("project selected", logger.Args("selectedPj", pterm.Green(selectedPj)))
 	if err := command.SetProject(selectedPj.ID); err != nil {
-		pterm.Error.Printfln("Unable to change project. %s", err)
+		logger.Error("Unable to change project.", logger.Args("err", err))
 		os.Exit(1)
 	} else {
-		pterm.Success.Printfln("Switched to %s", selectedPj.Description())
+		logger.Info("Switched successfully", logger.Args("ID", selectedPj.ID, "project name", selectedPj.Name, "project number", selectedPj.Number))
 		return
 	}
 }
 
 func openBrowser(selectedPj projects.Project) {
 	url := fmt.Sprintf("https://console.cloud.google.com/welcome?project=%s", selectedPj.ID)
-	pterm.Success.Printfln("Opening %s in browser", selectedPj.String())
+	logger.Info("Opening project in browser", logger.Args("project", selectedPj.String()))
 	err := browser.OpenBrowser(url)
 
 	if err != nil {
-		pterm.Error.Println("Failed to open browser", err)
+		logger.Error("Failed to open browser", logger.Args("err", err))
 		os.Exit(1)
 	}
 }
