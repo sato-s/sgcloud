@@ -23,9 +23,9 @@ func main() {
 	flag.Parse()
 
 	if *debugPrintPtr {
-		logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelDebug)
+		logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelDebug).WithTime(false)
 	} else {
-		logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo)
+		logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithTime(false)
 	}
 
 	ensureGcloudInstalled()
