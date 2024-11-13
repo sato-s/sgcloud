@@ -99,7 +99,7 @@ func gcloudProjectChange(selectedPj projects.Project) {
 		pterm.Error.Printfln("Unable to change project. %s", err)
 		os.Exit(1)
 	} else {
-		pterm.Success.Printfln("Switched to %s", selectedPj.String())
+		pterm.Success.Printfln("Switched to %s", selectedPj.Description())
 		return
 	}
 }
