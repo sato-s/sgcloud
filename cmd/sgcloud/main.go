@@ -98,14 +98,22 @@ func showProjectSelector(pjs projects.Projects) projects.Project {
 }
 
 func gcloudProjectChange(selectedPj projects.Project) {
-	logger.Debug("project selected", logger.Args("selectedPj", pterm.Green(selectedPj)))
+	logger.Debug("project selected", logger.Args("selectedPj", selectedPj))
+	spinner, _ := pterm.DefaultSpinner.Start("gcloud config set project " + pterm.Blue(selectedPj.ID))
 	if err := command.SetProject(selectedPj.ID); err != nil {
-		logger.Error("Unable to change project.", logger.Args("err", err))
+		spinner.Fail("Unable to change project.", logger.Args("err", err))
 		os.Exit(1)
 	} else {
-		logger.Info("Switched successfully", logger.Args("ID", selectedPj.ID, "project name", selectedPj.Name, "project number", selectedPj.Number))
+		spinner.Info("Switched successfully")
+		bulletListItems := []pterm.BulletListItem{
+			{Level: 0, Text: "ID: " + pterm.Blue(selectedPj.ID)},
+			{Level: 0, Text: "project name: " + pterm.Blue(selectedPj.Name)},
+			{Level: 0, Text: "project number: " + pterm.Blue(selectedPj.Number)},
+		}
+		pterm.DefaultBulletList.WithItems(bulletListItems).Render()
 		return
 	}
+
 }
 
 func openBrowser(selectedPj projects.Project) {
