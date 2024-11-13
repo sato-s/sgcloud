@@ -92,7 +92,7 @@ func showProjectSelector(pjs projects.Projects) projects.Project {
 		}
 	}
 	// Never reach here
-	pterm.Error.Printfln("Unable to find selected project %s", selectedPjStr)
+	logger.Error("Unable to find selected project", logger.Args("selectedPjStr", selectedPjStr))
 	os.Exit(1)
 	return projects.Project{}
 }
