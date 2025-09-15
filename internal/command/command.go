@@ -3,6 +3,7 @@ package command
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/pterm/pterm"
@@ -10,7 +11,16 @@ import (
 )
 
 func ProjectList() (projects.Projects, error) {
-	out, err := runGcloud("--format", "json", "projects", "list")
+	filter, ok := os.LookupEnv("SGCLOUD_PROJECT_FILTER")
+	var args []string
+	if ok {
+		args = []string{"--format", "json", "--filter", filter, "projects", "list"}
+	} else {
+		args = []string{"--format", "json", "projects", "list"}
+	}
+
+	out, err := runGcloud(args...)
+
 	if err != nil {
 		return projects.Projects{}, err
 	} else {
