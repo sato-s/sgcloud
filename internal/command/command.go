@@ -14,7 +14,7 @@ func ProjectList() (projects.Projects, error) {
 	filter, ok := os.LookupEnv("SGCLOUD_PROJECT_FILTER")
 	var args []string
 	if ok {
-		args = []string{"--format", "json", "--filter", filter, "projects", "list"}
+		args = []string{"--format", "json", "projects", "list", "--filter", filter}
 	} else {
 		args = []string{"--format", "json", "projects", "list"}
 	}
@@ -29,6 +29,9 @@ func ProjectList() (projects.Projects, error) {
 		if err != nil {
 			return projects.Projects{}, fmt.Errorf("Failed to parse output. %v", err)
 		} else {
+			if len(pjs) == 0 {
+				return nil, fmt.Errorf("No projects found: args=%v", args)
+			}
 			return pjs, nil
 		}
 	}

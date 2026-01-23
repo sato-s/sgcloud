@@ -82,6 +82,7 @@ func showProjectSelector(pjs projects.Projects) projects.Project {
 		Show()
 	if err != nil {
 		logger.Error("Failed to run selector", logger.Args("err", err))
+		logger.Error("options", logger.Args("options", options))
 		os.Exit(1)
 	}
 
