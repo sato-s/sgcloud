@@ -14,6 +14,7 @@ import (
 )
 
 const sgCloudDefaultConfigName = "sgcloud"
+const demoProjects = false
 
 var logger *pterm.Logger
 
@@ -49,6 +50,15 @@ func ensureGcloudInstalled() {
 }
 
 func getProjects() projects.Projects {
+	if demoProjects {
+		return projects.Projects{
+			{ID: "example-my-web-project", Name: "example-my-web-project", Number: "000000000000"},
+			{ID: "example-my-sample-project", Name: "example-my-sample-project", Number: "000000000000"},
+			{ID: "example-my-homepage", Name: "example-my-homepage", Number: "000000000000"},
+			{ID: "example-my-machinelearning-project", Name: "example-my-machinelearning-project", Number: "000000000000"},
+			{ID: "example-my-datascience-project", Name: "example-my-datascience-project", Number: "000000000000"},
+		}
+	}
 	cache, err1 := cache.NewCache()
 	if err1 != nil {
 		logger.Debug("Failed to read cache.", logger.Args("err", err1))
