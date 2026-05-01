@@ -20,6 +20,7 @@ Mac (apple silicon)
 ```
 sudo wget https://github.com/sato-s/sgcloud/releases/latest/download/sgcloud-darwin-arm64 -O /usr/local/bin/sgcloud
 sudo chmod 755 /usr/local/bin/sgcloud
+xattr -d com.apple.quarantine /usr/local/bin/sgcloud
 ```
 
 ## Usage
