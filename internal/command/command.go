@@ -10,13 +10,15 @@ import (
 	"github.com/sato-s/sgcloud/internal/projects"
 )
 
+const defaultFilter = "NOT (projectId:sys-* OR projectId:qwiklabs-*)"
+
 func ProjectList() (projects.Projects, error) {
 	filter, ok := os.LookupEnv("SGCLOUD_PROJECT_FILTER")
 	var args []string
 	if ok {
 		args = []string{"--format", "json", "projects", "list", "--filter", filter}
 	} else {
-		args = []string{"--format", "json", "projects", "list"}
+		args = []string{"--format", "json", "projects", "list", "--filter", defaultFilter}
 	}
 
 	out, err := runGcloud(args...)
